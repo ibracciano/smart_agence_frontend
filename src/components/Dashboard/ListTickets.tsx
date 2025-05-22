@@ -96,7 +96,7 @@ const ListTickets: React.FC = () => {
     queryKey: ["tickets"],
     queryFn: fetchTickets,
   });
-  console.log("tickets", data);
+  // console.log("agent", agent_connect);
 
   const mutationStatus = useMutation({
     mutationFn: fecthStatus,
@@ -224,44 +224,52 @@ const ListTickets: React.FC = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredTickets?.reverse().map((ticket, i) => (
-              <tr key={i}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {ticket.status?.numero_ticket}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {ticket.categorie_service_concernee}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <span
-                    onClick={() => handleStatusClick(ticket as TicketResponse)}
-                    className={`cursor-pointer ${getStatusColor(
-                      ticket.status?.statut
-                    )}`}
-                  >
-                    {ticket.status?.statut}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {convertInDate(ticket.date_heure_creation)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {getHour(ticket.date_heure_creation)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {ticket.description ? ticket.description : "Aucune"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {ticket.agent ? ticket.agent.nom : "Aucun"}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {getTimes(
-                    ticket.date_heure_creation,
-                    ticket.status.updated_date.toString()
-                  )}
-                </td>
-              </tr>
-            ))}
+            {filteredTickets
+              ?.reverse()
+              .filter(
+                (ticket) =>
+                  ticket.categorie_service_concernee === agent_connect.categorie
+              )
+              .map((ticket, i) => (
+                <tr key={i}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.status?.numero_ticket}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.categorie_service_concernee}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span
+                      onClick={() =>
+                        handleStatusClick(ticket as TicketResponse)
+                      }
+                      className={`cursor-pointer ${getStatusColor(
+                        ticket.status?.statut
+                      )}`}
+                    >
+                      {ticket.status?.statut}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {convertInDate(ticket.date_heure_creation)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {getHour(ticket.date_heure_creation)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.description ? ticket.description : "Aucune"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.agent ? ticket.agent.nom : "Aucun"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {getTimes(
+                      ticket.date_heure_creation,
+                      ticket.status.updated_date.toString()
+                    )}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

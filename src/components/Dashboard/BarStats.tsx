@@ -32,6 +32,8 @@ const BarStats: React.FC<PropsTypes> = ({ agents }: PropsTypes) => {
     queryKey: ["tickets"],
     queryFn: fetchTickets,
   });
+
+  // console.log(data);
   // Calcul du nombre de tickets avec des status spécifiques
   const createdTickets = data?.length;
   const handledTickets = data?.filter(
@@ -109,7 +111,7 @@ const BarStats: React.FC<PropsTypes> = ({ agents }: PropsTypes) => {
 
   if (ticketsParCategorie) {
     categorieChartData = Object.entries(ticketsParCategorie).map(
-      ([categorie, count]) => ({
+      ([categorie, count]: [string, number]) => ({
         categorie,
         count,
       })
