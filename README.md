@@ -1,54 +1,39 @@
-# React + TypeScript + Vite
+Smart Agence: Application de Gestion de Clients pour une AgenceDescription du ProjetSmart Agence est une application web complète conçue pour aider les agences à gérer efficacement leurs agents, les tickets clients et le suivi des activités associées. Le projet est divisé en deux parties principales : une API robuste développée avec FastAPI pour la gestion des données, et une interface utilisateur intuitive construite avec React et TypeScript, stylisée avec Tailwind CSS. La base de données utilisée pour le stockage des informations est MongoDB.Fonctionnalités ClésGestion des Agents : Permet d'ajouter, de modifier et de supprimer les profils des agents de l'agence.Gestion des Tickets Clients : Création, suivi et mise à jour des tickets soumis par les clients.Suivi des Activités : Enregistrement et visualisation des actions et des progrès liés au traitement des tickets.API RESTful : Une interface backend puissante pour toutes les opérations de données.Interface Utilisateur Réactive : Une expérience utilisateur fluide et moderne pour la gestion quotidienne.Technologies UtiliséesBackendFastAPI (Python) : Framework web pour la création d'APIs rapides et robustes.Prisma : ORM nouvelle génération (bien que pour MongoDB, une autre librairie Python sera utilisée en parallèle ou à la place de Prisma si Prisma ne supporte pas MongoDB directement).MongoDB : Base de données NoSQL pour le stockage des données.FrontendReact (TypeScript) : Bibliothèque JavaScript pour la construction d'interfaces utilisateur.TypeScript : Sur-ensemble de JavaScript qui ajoute le typage statique.Tailwind CSS : Framework CSS utilitaire pour un stylisme rapide et personnalisable.PrérequisAssurez-vous d'avoir les éléments suivants installés sur votre machine :Node.js (version 18 ou supérieure)Python 3 (version 3.x)Un environnement virtuel Python (recommandé)InstallationLe projet est divisé en deux dépôts distincts pour le backend et le frontend.1. Cloner les DépôtsClonez les deux dépôts Git sur votre machine locale :Backend (API FastAPI) :git clone https://github.com/ibracciano/smart_agence.git
+cd smart_agence
+Frontend (Interface Utilisateur React) :git clone https://github.com/ibracciano/smart_agence_frontend.git
+cd smart_agence_frontend 2. Configuration du BackendNaviguez vers le dossier du backend :cd smart_agence
+Créez et activez un environnement virtuel Python :python3 -m venv venv
+source venv/bin/activate # Sur Linux/macOS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# ou
 
-Currently, two official plugins are available:
+# venv\Scripts\activate # Sur Windows
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Installez les dépendances Python :pip install -r requirements.txt
+Générez le client Prisma :npx prisma generate
+Note : Assurez-vous d'avoir npm ou yarn installé pour npx.Configurez votre base de données MongoDB :Créez un fichier .env à la racine de votre dossier smart_agence et ajoutez votre URL de connexion MongoDB :MONGODB_URL="mongodb://localhost:27017/smart_agence_db"
 
-## Expanding the ESLint configuration
+# Ou votre URL de connexion à un service MongoDB cloud (ex: MongoDB Atlas)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3. Configuration du FrontendNaviguez vers le dossier du frontend :cd smart_agence_frontend
+   Installez les dépendances Node.js :npm install
+   npm i @tanstack/react-query @tanstack/react-query-devtools lucide-react react-hot-toast react-router-dom recharts
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+# ou
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+# yarn install
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# yarn add @tanstack/react-query @tanstack/react-query-devtools lucide-react react-hot-toast react-router-dom recharts
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Configurez l'URL de l'API Backend :Créez un fichier .env (ou .env.local) à la racine de votre dossier smart_agence_frontend et définissez l'URL de votre backend FastAPI :VITE_API_BASE_URL=http://localhost:8000
+
+# Ajustez le port si votre backend s'exécute sur un autre port
+
+Utilisation1. Lancer le BackendDepuis le dossier smart_agence (avec l'environnement virtuel activé) :uvicorn main:app --reload
+L'API sera accessible à l'adresse http://localhost:8000 (ou le port spécifié). La documentation Swagger UI sera disponible à http://localhost:8000/docs.2. Lancer le FrontendDepuis le dossier smart_agence_frontend :npm run dev
+
+# ou
+
+# yarn dev
+
+L'interface utilisateur sera accessible à l'adresse http://localhost:5173 (ou le port indiqué par votre terminal).Liens des DépôtsBackend : https://github.com/ibracciano/smart_agence.gitFrontend : https://github.com/ibracciano/smart_agence_frontend.gitContributionLes contributions sont les bienvenues ! Veuillez suivre les étapes suivantes :Forker le dépôt.Créer une nouvelle branche (git checkout -b feature/nouvelle-fonctionnalite).Effectuer vos modifications.Commiter vos changements (git commit -m 'Ajout d'une nouvelle fonctionnalité').Pousser vers la branche (git push origin feature/nouvelle-fonctionnalite).Ouvrir une Pull Request.LicenceCe projet est sous licence [Spécifiez votre licence ici, par exemple MIT, Apache 2.0, etc.].
