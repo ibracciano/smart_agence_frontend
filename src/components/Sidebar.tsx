@@ -15,7 +15,7 @@ const Sidebar: React.FC = () => {
   return (
     <div>
       {/* Sidebar */}
-      <div className="bg-purple-600 text-white min-h-screen fixed left-0 w-[20%] flex flex-col p-6">
+      <div className="bg-purple-600 text-white min-h-screen fixed left-0 w-[15%] flex flex-col p-6">
         <div className="mb-8 cursor-pointer" onClick={() => navigate("/")}>
           {/* Home Icon */}
           <svg

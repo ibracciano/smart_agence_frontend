@@ -10,8 +10,13 @@ import {
   fetchAgents,
   updateAgent,
 } from "../../hooks/useFetch";
+import toast from "react-hot-toast";
 
 const AgentManagement = () => {
+  const agentConnectString = localStorage.getItem("agent_connect");
+  const agent_connect = agentConnectString
+    ? JSON.parse(agentConnectString)
+    : null; // Déclarez agent_connect avec un type qui accepte null au départ
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [categorie, setCategorie] = useState("");
@@ -26,6 +31,8 @@ const AgentManagement = () => {
     annee_de_naissance: "",
   });
 
+  // console.log(agent_connect);
+
   //  utilisatation de useQuery
   const { isLoading, isError, data } = useQuery<Agent[]>({
     queryKey: ["agents"],
@@ -33,6 +40,7 @@ const AgentManagement = () => {
   });
 
   // pour ajouter et modifier une agent
+
   const mutation = useMutation({
     mutationFn: agentToEdit ? updateAgent : addAgent,
     onSuccess: () => {
@@ -77,10 +85,14 @@ const AgentManagement = () => {
         // L'agent_id n'est pas nécessaire lors de la création
       };
     }
-    // console.log("error", mutation.co);
-    mutation.mutate(dataToSubmit);
-    if (mutation.isSuccess) {
-      resetForm();
+    if (agent_connect.role === "ADMINISTRATEUR") {
+      // console.log("error", mutation.co);
+      mutation.mutate(dataToSubmit);
+      if (mutation.isSuccess) {
+        resetForm();
+      }
+    } else {
+      toast.error("Vous n'êtes pas autorisé");
     }
   };
 
@@ -375,6 +387,7 @@ const AgentManagement = () => {
                   <option value="Selectionner une categorie" disabled>
                     Sélectionner une catégorie
                   </option>
+                  <option value="TRANSACTION">TRANSACTION</option>
                   <option value="CREDIT">CREDIT</option>
                   <option value="CONSEIL">CONSEIL</option>
                   <option value="SERVICE_CLIENT">SERVICE CLIENT</option>

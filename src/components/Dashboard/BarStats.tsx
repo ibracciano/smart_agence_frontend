@@ -153,7 +153,7 @@ const BarStats: React.FC<PropsTypes> = ({ agents }: PropsTypes) => {
       </div>
 
       {/* Graphiques */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mt-8">
         {/* Tickets traités par agent */}
         <div>
           <h3 className="text-lg font-semibold mb-4">
@@ -217,7 +217,7 @@ const BarStats: React.FC<PropsTypes> = ({ agents }: PropsTypes) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-8 mt-8">
         {/* Evolution quotidienne des tickets traités */}
         <div>
           <h3 className="text-lg font-semibold mb-4">

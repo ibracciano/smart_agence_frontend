@@ -1,3 +1,9 @@
+type CATEGORIE =
+  | "TRANSACTION"
+  | "CREDIT"
+  | "CONSEIL"
+  | "CONFORMITE"
+  | "SERVICE_CLIENT";
 export interface Agent {
   agent_id: string;
   nom: string;
@@ -52,10 +58,11 @@ export interface AgentResponse {
   nom?: string;
   prenoms?: string;
   annee_de_naissance?: string;
-  categorie?: "TRANSACTION" | "SUPPORT" | "INCIDENT" | "AUTRE"; // Assuming these are the possible enum values
+  categorie?: CATEGORIE; // Assuming these are the possible enum values
   date_enregistrement?: string;
   email?: string;
   telephone?: string;
+  role?: string;
   // You might have other agent properties
 }
 
@@ -63,7 +70,7 @@ interface TicketRes {
   id: string;
   agent_id: string | null;
   date_heure_creation: string;
-  categorie_service_concernee: "TRANSACTION" | "SUPPORT" | "INCIDENT" | "AUTRE"; // Assuming these are the possible enum values
+  categorie_service_concernee: CATEGORIE; // Assuming these are the possible enum values
   description: string | null;
   agent: AgentResponse | null;
   status: Status;

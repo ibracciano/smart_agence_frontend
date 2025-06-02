@@ -8,7 +8,7 @@ const Layout = () => {
       {/* Sidebar */}
       <Sidebar />
       {/* Main Content */}
-      <div className="ml-[20%] w-full">
+      <div className="ml-[15%] w-[85%]">
         <Outlet />
       </div>
     </div>

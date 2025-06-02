@@ -7,6 +7,7 @@ import { convertInDate, getHour, getTimes } from "../../services/services";
 // import ConnectionErrorPage from "../utils/ConnectionErrorPage";
 import LoadingPage from "../utils/LoadingPage";
 import NoDataPage from "../utils/NoDataPage";
+import { EyeIcon, X } from "lucide-react";
 
 interface Ticket {
   numero: string;
@@ -15,74 +16,14 @@ interface Ticket {
   dateAjout: Date;
 }
 
-const ListTickets: React.FC = () => {
+const ListTicketsDashboard: React.FC = () => {
+  const [isModalDescriptionOpen, setIsModalDescriptionOpen] = useState(false);
+  const [description, setDescription] = useState("");
   const queryClient = useQueryClient();
   const agentConnectString = localStorage.getItem("agent_connect");
   const agent_connect = agentConnectString
     ? JSON.parse(agentConnectString)
     : null; // Déclarez agent_connect avec un type qui accepte null au départ
-  // const [tickets, setTickets] = useState<Ticket[]>([
-  //   {
-  //     numero: "T001",
-  //     categorie: "Incident",
-  //     status: "EN_ATTENTE",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T002",
-  //     categorie: "Demande",
-  //     status: "EN_COURS",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T003",
-  //     categorie: "Problème",
-  //     status: "VALIDE",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T004",
-  //     categorie: "Incident",
-  //     status: "ECHEC",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T005",
-  //     categorie: "Demande",
-  //     status: "EN_ATTENTE",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T006",
-  //     categorie: "Amélioration",
-  //     status: "EN_COURS",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T007",
-  //     categorie: "Question",
-  //     status: "VALIDE",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T008",
-  //     categorie: "Incident",
-  //     status: "EN_ATTENTE",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T009",
-  //     categorie: "Demande",
-  //     status: "ECHEC",
-  //     dateAjout: new Date(),
-  //   },
-  //   {
-  //     numero: "T010",
-  //     categorie: "Problème",
-  //     status: "VALIDE",
-  //     dateAjout: new Date(),
-  //   },
-  // ]);
 
   //  utilisatation de useQuery
   const [statusFilter, setStatusFilter] = useState<string | undefined>();
@@ -108,6 +49,16 @@ const ListTickets: React.FC = () => {
     },
   });
 
+  const filteredTickets = data?.filter((ticket) => {
+    const statusMatch = !statusFilter || ticket.status?.statut === statusFilter;
+    return statusMatch;
+  });
+
+  const handleModalDescription = (information: string) => {
+    setIsModalDescriptionOpen(true);
+    setDescription(information);
+  };
+
   // console.log("status", newStatus);
 
   const getStatusColor = (status: string) => {
@@ -132,7 +83,11 @@ const ListTickets: React.FC = () => {
   };
 
   const handleSaveStatus = () => {
-    if (newStatus && selectedTicket) {
+    if (
+      newStatus &&
+      selectedTicket &&
+      agent_connect.role === "ADMINISTRATEUR"
+    ) {
       mutationStatus.mutate({
         agent_id: agent_connect?.agent_id as string,
         status: newStatus,
@@ -145,14 +100,9 @@ const ListTickets: React.FC = () => {
     }
   };
 
-  const filterValide = data?.filter(
-    (ticket) => ticket.status.statut !== "VALIDE"
-  );
-
-  const filteredTickets = filterValide?.filter((ticket) => {
-    const statusMatch = !statusFilter || ticket.status?.statut === statusFilter;
-    return statusMatch;
-  });
+  const subString = (word: string, nb: number = 10) => {
+    return word.substring(0, nb) + "...";
+  };
 
   if (isLoading) {
     return (
@@ -172,7 +122,7 @@ const ListTickets: React.FC = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="py-4">
       <h1 className="text-2xl font-bold mb-4">Liste des Tickets</h1>
 
       <div className="flex gap-4 mb-4">
@@ -193,8 +143,8 @@ const ListTickets: React.FC = () => {
         </div>
       </div>
 
-      <div className="shadow-md rounded-md overflow-x-auto">
-        <table className="min-w-full bg-white rounded-md">
+      <div className="shadow-md rounded-md">
+        <table className="bg-white overflow-x-auto rounded-md">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b">
@@ -225,53 +175,62 @@ const ListTickets: React.FC = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredTickets && filteredTickets?.length > 0 ? (
-              filteredTickets
-                ?.reverse()
-                .filter(
-                  (ticket) =>
-                    ticket.categorie_service_concernee ===
-                    agent_connect.categorie
-                )
-                .map((ticket, i) => (
-                  <tr key={i}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {ticket.status?.numero_ticket}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {ticket.categorie_service_concernee}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <span
-                        onClick={() =>
-                          handleStatusClick(ticket as TicketResponse)
-                        }
-                        className={`cursor-pointer ${getStatusColor(
-                          ticket.status?.statut
-                        )}`}
-                      >
-                        {ticket.status?.statut}
+              filteredTickets?.reverse().map((ticket, i) => (
+                <tr key={i}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.status?.numero_ticket}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.categorie_service_concernee}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <span
+                      onClick={() =>
+                        handleStatusClick(ticket as TicketResponse)
+                      }
+                      className={`cursor-pointer ${getStatusColor(
+                        ticket.status?.statut
+                      )}`}
+                    >
+                      {ticket.status?.statut}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {convertInDate(ticket.date_heure_creation)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {getHour(ticket.date_heure_creation)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <div className="flex items-center gap-2">
+                      <span>
+                        {ticket.description
+                          ? subString(ticket.description)
+                          : "Aucune"}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {convertInDate(ticket.date_heure_creation)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {getHour(ticket.date_heure_creation)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {ticket.description ? ticket.description : "Aucune"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {ticket.agent ? ticket.agent.nom : "Aucun"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {getTimes(
-                        ticket.date_heure_creation,
-                        ticket.status.updated_date.toString()
-                      )}
-                    </td>
-                  </tr>
-                ))
+                      <button className="cursor-pointer">
+                        <EyeIcon
+                          size={15}
+                          onClick={() =>
+                            handleModalDescription(
+                              ticket?.description as string
+                            )
+                          }
+                        />
+                      </button>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.agent ? ticket.agent.nom : "Aucun"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {getTimes(
+                      ticket.date_heure_creation,
+                      ticket.status.updated_date.toString()
+                    )}
+                  </td>
+                </tr>
+              ))
             ) : (
               <tr className="text-center w-full text-sm p-2 flex justify-center">
                 Aucun Ticket
@@ -328,8 +287,25 @@ const ListTickets: React.FC = () => {
           </div>
         </div>
       )}
+
+      {isModalDescriptionOpen && description && (
+        <div className="fixed inset-0 bg-black/70 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-5 rounded-md">
+            <h2 className="text-lg font-semibold mb-4">
+              Description du ticket
+            </h2>
+            <p>{description}</p>
+            <button
+              onClick={() => setIsModalDescriptionOpen(false)}
+              className="absolute cursor-pointer top-1/3 right-[40%] bg-red-500 text-white rounded-md"
+            >
+              <X />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ListTickets;
+export default ListTicketsDashboard;

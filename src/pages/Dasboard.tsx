@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import ListTickets from "../components/Dashboard/ListTickets";
 // import StatsComponent from "../components/Dashboard/StatsCOmponent";
 import BarStats from "../components/Dashboard/BarStats";
 import { useQuery } from "@tanstack/react-query";
 import type { Agent } from "../types/types";
 import { fetchAgents } from "../hooks/useFetch";
+import ListTicketsDashboard from "../components/Dashboard/ListTicketsDashboard";
 
 const Dasboard: React.FC = () => {
   const agentConnectString = localStorage.getItem("agent_connect");
@@ -104,13 +104,8 @@ const Dasboard: React.FC = () => {
         <BarStats agents={agents as Agent[]} />
 
         {/* Main Dashboard Grid */}
-        <div className="flex justify-between gap-6 w-full mt-5">
-          {/* Left Section */}
 
-          <div className="">
-            <ListTickets />
-          </div>
-        </div>
+        <ListTicketsDashboard />
       </div>
     </div>
   );

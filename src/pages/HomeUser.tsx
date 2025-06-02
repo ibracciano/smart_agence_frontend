@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Package, MessageSquare, Headphones, Shield } from "lucide-react";
+import {
+  Package,
+  MessageSquare,
+  Headphones,
+  Shield,
+  LucideCreditCard,
+} from "lucide-react";
 import type { Ticket } from "../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTicket } from "../hooks/useFetch";
@@ -17,6 +23,7 @@ const HomeUser = () => {
     { name: "CONSEIL", icon: MessageSquare },
     { name: "SERVICE CLIENT", icon: Headphones },
     { name: "CONFORMITE", icon: Shield },
+    { name: "CREDIT", icon: LucideCreditCard },
   ];
 
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -80,7 +87,7 @@ const HomeUser = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen py-6 sm:py-12">
-      <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+      <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="px-8 py-6">
           <h1 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
             Ouverture de Ticket de Service
@@ -116,7 +123,7 @@ const HomeUser = () => {
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Choisissez un service :
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mt-4">
                   {serviceOptions.map((service) => (
                     <button
                       key={service.name}
