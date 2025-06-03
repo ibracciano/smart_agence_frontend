@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fecthStatus, fetchTickets } from "../../hooks/useFetch";
 import type { TicketResponse } from "../../types/types";
-import { convertInDate, getHour, getTimes } from "../../services/services";
+import { convertInDate, getHour, getTimes } from "../../utils/utils";
 // import ConnectionErrorPage from "../utils/ConnectionErrorPage";
 import LoadingPage from "../utils/LoadingPage";
 import NoDataPage from "../utils/NoDataPage";

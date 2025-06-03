@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
       <App />
       <Toaster position="top-center" reverseOrder={false} />
       {import.meta.env.NODE_ENV === "development" && (
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ReactQueryDevtools initialIsOpen={false} />
       )}
     </QueryClientProvider>
   </StrictMode>

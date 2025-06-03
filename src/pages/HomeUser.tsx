@@ -9,7 +9,7 @@ import {
 import type { Ticket } from "../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTicket } from "../hooks/useFetch";
-import { generateTicketNumber } from "../services/services";
+import { generateTicketNumber } from "../utils/utils";
 
 interface ServiceOption {
   name: string;
